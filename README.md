@@ -29,4 +29,10 @@ Ensure you have the following installed:
 
    ```bash
    git clone https://github.com/pointarcher02/Adaptive-Authentication-System-using-Generative-AI.git
+
+
+![image](https://github.com/user-attachments/assets/3a7a4a8f-308e-41e8-a849-fc61838c2766)
+
    
+![image](https://github.com/user-attachments/assets/54b01005-584a-43c3-a61d-2f9a5c95e165)
+
