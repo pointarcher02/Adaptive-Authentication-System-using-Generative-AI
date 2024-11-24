@@ -1,0 +1,83 @@
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adaptive Authentication</title>
+    <link rel="stylesheet" href="static/style.css">
+</head>
+<body>
+    <div class="background-container">
+        <div class="form-container">
+            <img src="static/Thales.jpg" alt="Thales Logo" class="logo"> <!-- Ensure the logo is correctly referenced -->
+            <h2>Adaptive Authentication system using Generative AI</h2>
+            <form id="authentication-form">
+                <label for="typing-speed">Typing Speed:</label>
+                <input type="number" id="typing-speed" name="typing_speed" required><br>
+
+                <label for="mouse-movement">Mouse Movement:</label>
+                <input type="number" id="mouse-movement" name="mouse_movement" required><br>
+
+                <label for="location">Location:</label>
+                <input type="text" id="location" name="location" required><br>
+
+                <button type="submit">Authenticate</button>
+            </form>
+            <div id="response-container"></div>
+        </div>
+    </div>
+    <script>
+    document.getElementById('authentication-form').addEventListener('submit', async function(event) {
+        event.preventDefault();
+    
+        const typingSpeed = document.getElementById('typing-speed').value;
+        const mouseMovement = document.getElementById('mouse-movement').value;
+        const location = document.getElementById('location').value;
+    
+        const payload = {
+            typing_speed: parseInt(typingSpeed),
+            mouse_movement: parseInt(mouseMovement),
+            location: location
+        };
+    
+        try {
+            const response = await fetch('http://127.0.0.1:8000/authenticate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            });
+    
+            const responseData = await response.json();
+            displayResponse(responseData);
+        } catch (error) {
+            displayResponse({ error: "Unable to connect to the server. Please try again later." });
+        }
+    });
+    
+    function displayResponse(responseData) {
+        const responseContainer = document.getElementById('response-container');
+        responseContainer.innerHTML = '';  // Clear previous content
+    
+        if (responseData.error) {
+            responseContainer.innerHTML = `<p class="error">${responseData.error}</p>`;
+        } else {
+            let statusText = responseData.access_granted ? "Access Granted" : "Access Denied";
+            responseContainer.innerHTML = `<p>${statusText}</p>`;
+        
+            if (responseData.explanation) {
+                responseContainer.innerHTML += `<p>Explanation: ${responseData.explanation}</p>`;
+            }
+        
+            if (responseData.next_step) {
+                responseContainer.innerHTML += `<p>Next Step: ${responseData.next_step}</p>`;
+            }
+        }
+    }
+    </script>
+</body>
+</html>
